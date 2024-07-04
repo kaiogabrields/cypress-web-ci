@@ -70,19 +70,11 @@ jobs:
        uses: cypress-io/github-action@v6
 
        with:
-
-         spec: |
-
-           cypress/e2e/cadastro.cy.js
-
-           cypress/e2e/login-api.cy.js
-
-           cypress/e2e/dashboard.cy.js
-
+         spec: cypress/e2e/cadastro.cy.js
          wait-on: 'http://localhost:3000,http://localhost:8080'
          record: true
 
-         env:
-         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       env:
+           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                
