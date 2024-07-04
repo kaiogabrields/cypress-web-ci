@@ -1,3 +1,5 @@
+var faker = require('faker-br');
+
 Cypress.Commands.add('login', (email, password) => { 
     cy.session([email,password], () =>{
         cy.visit('/login')
@@ -6,6 +8,26 @@ Cypress.Commands.add('login', (email, password) => {
         cy.contains('button', 'Entrar').click()
         cy.location('pathname').should('equal', '/dashboard')
     })
+ })
+
+ Cypress.Commands.add('cadastroSucesso', () => {
+    let password = faker.internet.password()
+    cy.contains('Cadastre-se').click()
+    cy.get('input[data-test="inputNome"]').type(faker.name.firstName())
+    cy.get('input[data-test="inputCNPJ"]').type(faker.br.cnpj())
+    cy.get('input[data-test="inputEmail"]').type(faker.internet.email())
+    cy.get('input[data-test="inputSenha"]').type(password, { log: false })
+    cy.get('input[data-test="inputSenhaVerificada"]').type(password)
+    cy.contains('button', 'Avançar').click()
+    cy.contains('h2', 'Agora, os dados técnicos:').should('be.visible')
+    cy.get('input[data-test="inputTelefone"]').type(faker.phone.phoneNumberFormat())
+    cy.get('input[data-test="inputCEP"]').type(faker.address.zipCodeValid())
+    cy.get('input[data-test="inputRua"]').type(faker.address.streetName())
+    cy.get('input[data-test="inputNumero"]').type(faker.random.number({min: 100, max:150}))
+    cy.get('input[data-test="inputComplemento"]').type(faker.address.city())
+    cy.get('input[data-test="inputEstado"]').type(faker.address.stateAbbr())
+    cy.contains('button', 'Cadastrar').click()
+    cy.contains('h2', 'Faça login em sua conta').should('be.visible')
  })
 
  Cypress.Commands.add('cadastroEspecialista', (nome, email, senha, especialidade, crm, telefone, imagem, cep, rua, numero, complemento, estado) => {
