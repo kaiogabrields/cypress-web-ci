@@ -26,28 +26,19 @@ Cypress.Commands.add('login', (email, password) => {
 
  })
 
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('loginApi', (email, senha) => {
+    cy.request({
+        method: 'POST',
+        url: Cypress.env('api_login'),
+        body: {
+            email: email,
+            senha: senha
+        }
+    }).then(response => {
+        expect(response.status).to.eq(200);
+        expect(response.body.auth).to.be.true;
+        expect(response.body.rota).to.eq('/clinica');
+        expect(response.body.token).to.exist;
+        cy.wrap(response.body.token).as('token')
+    })
+})
